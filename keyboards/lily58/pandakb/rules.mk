@@ -1,0 +1,22 @@
+MCU = RP2040
+BOOTLOADER = rp2040
+NKRO_ENABLE = yes            # Enable N-Key Rollover
+BACKLIGHT_ENABLE = no      # Enable keyboard backlight functionality
+
+ENCODER_ENABLE = yes       # ENables the use of one or more encoders
+LTO_ENABLE = yes 		   # significantly reduce the compiled size, but disable the legacy TMK Macros and Functions features
+
+OLED_DRIVER = ssd1306
+SERIAL_DRIVER = vendor
+RGB_MATRIX_ENABLE = yes
+
+# trackpad
+POINTING_DEVICE_ENABLE = yes
+POINTING_DEVICE_DRIVER = cirque_pinnacle_i2c
+CIRQUE_PINNACLE_DIAMETER_MM = 40
+CIRQUE_PINNACLE_CURVED_OVERLAY = yes
+CIRQUE_PINNACLE_ATTENUATION = EXTREG__TRACK_ADCCONFIG__ADC_ATTENUATE_1X
+CIRQUE_PINNACLE_POSITION_MODE = CIRQUE_PINNACLE_ABSOLUTE_MODE
+CIRQUE_PINNACLE_TAP_ENABLE = yes
+POINTING_DEVICE_GESTURES_SCROLL_ENABLE = yes
+POINTING_DEVICE_GESTURES_CURSOR_GLIDE_ENABLE = yes
