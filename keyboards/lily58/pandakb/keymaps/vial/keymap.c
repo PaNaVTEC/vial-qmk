@@ -22,6 +22,9 @@
 
 #ifdef OLED_ENABLE
 #include "oled.c"
+bool isSneaking = false;
+bool startedJump = false;
+bool startedVictory = false;
 #endif
 
 #define _______ KC_NO
@@ -40,16 +43,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [1] = LAYOUT(
   KC_GRV , _______, _______, _______, _______, _______,                   _______, _______, _______, KC_MINS,  KC_EQL, KC_DEL ,
   _______, _______, _______, _______, _______, _______,                   _______, KC_HOME, KC_UP  , KC_END , KC_LBRC, KC_RBRC,
-  _______, _______, _______, _______, _______, _______,                   KC_PGUP, KC_LEFT, KC_DOWN,KC_RIGHT, _______, _______,
-  _______, _______, _______, _______, _______, _______, KC_MUTE, _______, KC_PGDN, _______, _______, _______, _______, _______,
-                             _______, _______, _______, _______, _______, MO(3)  , _______, _______
+  KC_TRNS, _______, _______, _______, _______, _______,                   KC_PGUP, KC_LEFT, KC_DOWN,KC_RIGHT, _______, _______,
+  KC_TRNS, _______, _______, _______, _______, _______, KC_MUTE, _______, KC_PGDN, _______, _______, _______, _______, KC_TRNS,
+                             KC_TRNS, KC_TRNS, _______, _______, _______, MO(3)  , KC_TRNS, KC_TRNS
 ),
 [2] = LAYOUT(
   KC_GRV , KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,                   KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F11,
-  _______, _______, KC_7   , KC_8   , KC_9   , _______,                   _______, _______, _______, _______, _______, KC_F12,
-  KC_CAPS, _______, KC_4   , KC_5   , KC_6   , _______,                   _______, _______, _______, _______, _______, _______,
-  _______, _______, KC_1   , KC_2   , KC_3   , _______, _______, _______, _______, _______, _______, _______, _______, _______,
-                             KC_0   , KC_0   , MO(3)  , _______, _______, _______, _______, _______
+  KC_CAPS, _______, _______, KC_7   , KC_8   , KC_9   ,                   _______, _______, _______, _______, _______, KC_F12,
+  KC_TRNS, _______, _______, KC_4   , KC_5   , KC_6   ,                   _______, _______, _______, _______, _______, _______,
+  KC_TRNS, _______, _______, KC_1   , KC_2   , KC_3   , _______, _______, _______, _______, _______, _______, _______, KC_TRNS,
+                             KC_0   , KC_0   , MO(3)  , _______, _______, _______, KC_TRNS, KC_TRNS
 ),
 [3] = LAYOUT(
   _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
@@ -60,6 +63,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 )
 };
 
+#ifdef OLED_ENABLE
+bool oled_task_user(void) { return run_oled(isSneaking, startedJump, startedVictory); }
+#endif
+
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [0] = { ENCODER_CCW_CW(MS_WHLD, MS_WHLU) },
@@ -69,9 +76,19 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 };
 #endif
 
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if (record->event.pressed) {
+  switch (keycode) {
+    case KC_LSFT:
+    case KC_RSFT:
+      startedVictory = record->event.pressed;
+      break;
+    case KC_LCTL:
+    case KC_RCTL:
+      isSneaking = record->event.pressed;
+      break;
+    case KC_SPC:
+      startedJump  = record->event.pressed;
+      break;
   }
   return true;
 }

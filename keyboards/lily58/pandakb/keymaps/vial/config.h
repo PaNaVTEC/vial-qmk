@@ -24,6 +24,8 @@
 #define USE_SERIAL_PD2
 #define OLED_DISPLAY_64X128
 #define NUM_ENCODERS 2
+#undef OLED_FONT_H
+#define OLED_FONT_H "oled_font.c"
 
 #define SERIAL_USE_MULTI_TRANSACTION
 /* Set 0 if debouncing isn't needed */
